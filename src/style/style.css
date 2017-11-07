@@ -1,0 +1,49 @@
+h1{
+    text-align: center;
+}
+
+h5{
+    text-align: center;
+    margin-bottom: 30px;
+    opacity: 0.7
+}
+h6 {
+    text-align: center;
+    opacity: 0.5;
+    margin-top: -20px;
+    margin-bottom: 20px;
+}
+
+.btn, .btn-large {
+    margin-right: 2%;
+}
+
+.btnSearch{
+    width: 100%;
+}
+
+.btnNav {
+    width: 32%;
+}
+.btnNav.last{
+    margin-right: 0px; 
+}
+
+.mainCard{
+    margin-top: 50px;
+}
+
+.collection-item strong {
+    display: block;
+    text-align: center;
+}
+
+.err{
+    background: rgba(255,0,0,0.3);
+    text-align: center;
+    font-weight: bold;
+    color: rgb(72, 18, 18);
+    padding: 13px;
+    margin-bottom: 20px;
+    border-radius: 3px;
+}
