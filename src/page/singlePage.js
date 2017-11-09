@@ -1,7 +1,7 @@
 import React from 'react'
 import {BrowserRouter as Route, Link, Redirect} from 'react-router-dom'
 import {ProgressBar, Row, Col, Button, Icon, Card} from 'react-materialize'
-import {btnActif} from './homePage';
+import swal from 'sweetalert'
 
 
 export default class SinglePage extends React.Component{
@@ -15,14 +15,20 @@ export default class SinglePage extends React.Component{
     }
 
     componentDidMount(){
-        fetch("http://localhost:1337/")
+        fetch("http://localhost:1337/", {
+            credentials: 'include',
+        })
         .then(res => res.json())
         .then(data => {
             this.setState({
                 data : data
             })
         })
-        .catch(e => console.error(e))
+        .catch(function(error) {
+            swal("Erreur", "Une erreur est survenue pendant le chargement des données, rechargez la page", "error")
+            console.log(error)
+            
+        });
     }
 
     render(){

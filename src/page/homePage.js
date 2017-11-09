@@ -1,11 +1,10 @@
 import React from 'react';
 import Search from '../component/search';
 import Liste from '../component/liste';
-import {Col, Card, Row, ProgressBar, Modal, Button} from 'react-materialize'
+import {Col, Card, Row} from 'react-materialize'
+import swal from 'sweetalert'
 
-let errDate = ""
-var moment = require('moment');
-moment().format();
+
 
 export default class HomePage extends React.Component {
 
@@ -20,14 +19,20 @@ export default class HomePage extends React.Component {
 
     fetchApi(){
         //?from=00-00-0000&to=00-00-0000
-        fetch("http://localhost:1337/?from="+this.state.from+"&to="+this.state.to)
+        fetch("http://localhost:1337/?from="+this.state.from+"&to="+this.state.to, {
+            credentials: 'include',
+        })
         .then(res => res.json())
         .then(data => {
             this.setState({
                 data : data
             })
         })
-        .catch(e => console.error(e))
+        .catch(function(error) {
+            swal("Erreur", "Une erreur est survenue pendant le chargement des données, rechargez la page", "error")
+            console.log(error)
+            
+        });
     }
 
 
@@ -50,34 +55,32 @@ export default class HomePage extends React.Component {
     
     handleButtonClick = (event) => {
 
-        
-        
-        const regex = /[\d][\d]-[\d][\d]-[\d][\d][\d][\d]/g
-        let dateValidFrom = regex.test(this.state.from)
-        let dateValidTo = regex.test(this.state.to)
+        var moment = require('moment');
+        moment().format();
+
         let mDateFrom = moment(this.state.from , "DD-MM-YYYY")
         let mDateTo = moment(this.state.to, "DD-MM-YYYY")
+        let mDateValidFrom = mDateFrom.isValid()
+        let mDateValidTo = mDateTo.isValid()
 
-        if(dateValidFrom || dateValidTo){
-            
-            console.log("FROM : " + mDateFrom + " TO : " + mDateTo)
+
+        if(mDateValidFrom || mDateValidTo){
+
             
             if(mDateFrom > mDateTo){
-                
-                errDate = (
-                    <div className="err">
-                    La date de départ doit être inférieur à la date de fin
-                    </div>
-                )
-                
+                swal("La date de départ doit être inférieur à la date de fin")
+            }
+            else if(!mDateValidFrom){
+                swal("Veuillez indiquer une date de début correcte au format JJ-MM-AAAA")
+            }
+            else if(!mDateValidTo){
+                swal("Veuillez indiquer une date de fin correcte au format JJ-MM-AAAA")
             }
             else{
-                errDate = ""
                 this.setState({
                     data : ""
                 })
                 this.fetchApi()
-                console.log("HOME : " +this.state.data)
             }
         }
         else if((this.state.from === "") && (this.state.to === "")){
@@ -87,12 +90,7 @@ export default class HomePage extends React.Component {
             this.fetchApi()
         }
         else{
-            
-            errDate = (
-                <div className="err">
-                Veuillez indiquer une date au format JJ-MM-AAAA
-                </div>
-            )
+            swal("Veuillez indiquer une date correcte au format JJ-MM-AAAA")
         }
 
         
@@ -110,9 +108,12 @@ export default class HomePage extends React.Component {
                 <Row>
                 <Col m={3}></Col>
                 <Col m={6} s={12} className="mainCard">
+                    
                     <Card className='white' textClassName='blue-grey-text'>
+                    <h5>Horraires du pont Chaban-Delmas</h5>
                         <Search 
                             data={this.state.data}
+
                             valueFrom = {this.state.from}
                             valueTo = {this.state.to}
                             onInputChangeStart={this.handleInputChangeFrom}
@@ -120,9 +121,9 @@ export default class HomePage extends React.Component {
 
                             onButtonClick = {this.handleButtonClick}
                         />
-                        {errDate}
                         <Liste data={this.state.data} />
                     </Card>
+
                 </Col>
                 <Col m={3}></Col> 
             </Row>

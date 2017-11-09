@@ -45,7 +45,6 @@ export default class Liste extends React.Component {
                     {
                         this.props.data ? this.props.data.map((val, i) => {
                     
-                            console.log("LISTE : " +this.props.data)
                             return (
                                 <CollectionItem key={i} className="liste">
                                     <Link to={`/${i}`}>

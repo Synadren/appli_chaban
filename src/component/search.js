@@ -1,6 +1,6 @@
 import React from 'react';
 import InputDate from './input'
-import {Row, Button, Icon} from 'react-materialize'
+import {Row, Icon} from 'react-materialize'
 
 export default class Search extends React.Component {
 
